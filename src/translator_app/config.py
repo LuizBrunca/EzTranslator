@@ -28,7 +28,7 @@ APPDATA_DIR.mkdir(parents=True, exist_ok=True)
 DEFAULT_CONFIG = {
     "source_lang": "auto",
     "target_lang": "pt",
-    "hotkey": "<ctrl>+<alt>+t",
+    "hotkey": "<alt>+<shift>+t",
 }
 
 

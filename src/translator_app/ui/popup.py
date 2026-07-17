@@ -1,5 +1,5 @@
-from PySide6.QtCore import QEvent, Qt, QTimer
-from PySide6.QtGui import QCursor, QGuiApplication
+from PySide6.QtCore import QEvent, QRectF, Qt, QTimer
+from PySide6.QtGui import QCursor, QGuiApplication, QPainterPath, QRegion
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
@@ -20,6 +20,7 @@ class PopupWindow(QWidget):
     HEIGHT = 220
     CURSOR_OFFSET = 16
     DEBOUNCE_MS = 500
+    CORNER_RADIUS = 12
 
     def __init__(self):
         super().__init__()
@@ -27,13 +28,71 @@ class PopupWindow(QWidget):
             Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool
         )
         self.setFocusPolicy(Qt.StrongFocus)
-        self.resize(self.WIDTH, self.HEIGHT)
+        self.setFixedSize(self.WIDTH, self.HEIGHT)
+        self._apply_rounded_mask()
         self.setStyleSheet(
-            "background-color: #2b2b2b; border: 1px solid #555; color: white;"
+            """
+            QWidget {
+                background-color: #1e1e1e;
+                color: #f2f2f2;
+                font-family: "Segoe UI Variable Text", "Segoe UI Semibold", "Segoe UI";
+                font-size: 13px;
+                font-weight: 500;
+            }
+            QLineEdit, QComboBox {
+                background-color: #2a2a2a;
+                border: 1px solid #3a3a3a;
+                border-radius: 6px;
+                padding: 6px 8px;
+            }
+            QLineEdit:focus {
+                border: 1px solid #5b8def;
+            }
+            QLineEdit::placeholder {
+                color: #8a8a8a;
+            }
+            QComboBox::drop-down {
+                border: none;
+                width: 20px;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #2a2a2a;
+                border: 1px solid #3a3a3a;
+                selection-background-color: #5b8def;
+                outline: none;
+            }
+            QPushButton {
+                background-color: #2a2a2a;
+                border: 1px solid #3a3a3a;
+                border-radius: 6px;
+                padding: 6px 10px;
+            }
+            QPushButton:hover:enabled {
+                background-color: #333333;
+                border: 1px solid #5b8def;
+            }
+            QPushButton:disabled {
+                color: #666666;
+            }
+            QPushButton#swapButton {
+                border-radius: 16px;
+                font-size: 15px;
+                font-weight: 600;
+                padding: 0px;
+            }
+            QPushButton#swapButton:enabled {
+                color: #5b8def;
+            }
+            QLabel#outputLabel {
+                font-size: 15px;
+                font-weight: 500;
+            }
+            """
         )
 
         self._worker: TranslationWorker | None = None
         self._ignore_deactivate = False
+        self._drag_offset = None
 
         config = load_config()
 
@@ -45,7 +104,8 @@ class PopupWindow(QWidget):
         self._source_combo.currentIndexChanged.connect(self._on_source_changed)
 
         self._swap_button = QPushButton("⇆", self)
-        self._swap_button.setFixedWidth(32)
+        self._swap_button.setObjectName("swapButton")
+        self._swap_button.setFixedSize(32, 32)
         self._swap_button.clicked.connect(self._on_swap_clicked)
 
         self._target_combo = QComboBox(self)
@@ -70,6 +130,7 @@ class PopupWindow(QWidget):
         self._input.textChanged.connect(lambda: self._debounce_timer.start())
 
         self._output = QLabel(self)
+        self._output.setObjectName("outputLabel")
         self._output.setWordWrap(True)
         self._output.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
@@ -82,6 +143,8 @@ class PopupWindow(QWidget):
         output_row.addWidget(self._copy_button, alignment=Qt.AlignmentFlag.AlignTop)
 
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(14, 14, 14, 14)
+        layout.setSpacing(10)
         layout.addLayout(lang_row)
         layout.addWidget(self._input)
         layout.addLayout(output_row, 1)
@@ -107,8 +170,13 @@ class PopupWindow(QWidget):
 
     def _sync_language_combos_from_config(self) -> None:
         config = load_config()
+        self._source_combo.blockSignals(True)
+        self._target_combo.blockSignals(True)
         self._set_combo_value(self._source_combo, config["source_lang"])
         self._set_combo_value(self._target_combo, config["target_lang"])
+        self._source_combo.blockSignals(False)
+        self._target_combo.blockSignals(False)
+        self._update_swap_enabled()
 
     @staticmethod
     def _set_combo_value(combo: QComboBox, code: str) -> None:
@@ -152,9 +220,11 @@ class PopupWindow(QWidget):
     def _on_source_changed(self) -> None:
         self._update_swap_enabled()
         self._save_language_prefs()
+        self._on_translate_requested()
 
     def _on_target_changed(self) -> None:
         self._save_language_prefs()
+        self._on_translate_requested()
 
     def _save_language_prefs(self) -> None:
         config = load_config()
@@ -169,10 +239,17 @@ class PopupWindow(QWidget):
         new_source_index = self._source_combo.findData(target_code)
         new_target_index = self._target_combo.findData(source_code)
 
+        self._source_combo.blockSignals(True)
+        self._target_combo.blockSignals(True)
         if new_source_index != -1:
             self._source_combo.setCurrentIndex(new_source_index)
         if new_target_index != -1:
             self._target_combo.setCurrentIndex(new_target_index)
+        self._source_combo.blockSignals(False)
+        self._target_combo.blockSignals(False)
+
+        self._update_swap_enabled()
+        self._save_language_prefs()
 
         if self._copy_button.isEnabled():  # there's a real translation result to carry over
             self._input.blockSignals(True)
@@ -213,6 +290,28 @@ class PopupWindow(QWidget):
         QGuiApplication.clipboard().setText(self._output.text())
         self._copy_button.setText("Copied!")
         QTimer.singleShot(1200, lambda: self._copy_button.setText("Copy"))
+
+    def _apply_rounded_mask(self) -> None:
+        # Called once, right after setFixedSize — the window can never resize
+        # again, so there's no need (and no risk of the resizeEvent-driven
+        # layout-growth bug we hit) in recomputing this on every resize.
+        path = QPainterPath()
+        path.addRoundedRect(QRectF(0, 0, self.WIDTH, self.HEIGHT), self.CORNER_RADIUS, self.CORNER_RADIUS)
+        self.setMask(QRegion(path.toFillPolygon().toPolygon()))
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._drag_offset = event.globalPosition().toPoint() - self.pos()
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event) -> None:
+        if event.buttons() & Qt.MouseButton.LeftButton and self._drag_offset is not None:
+            self.move(event.globalPosition().toPoint() - self._drag_offset)
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event) -> None:
+        self._drag_offset = None
+        super().mouseReleaseEvent(event)
 
     def keyPressEvent(self, event) -> None:
         if event.key() == Qt.Key.Key_Escape:
