@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QWidget
 class PopupWindow(QWidget):
     WIDTH = 420
     HEIGHT = 160
+    CURSOR_OFFSET = 16
 
     def __init__(self):
         super().__init__()
@@ -33,15 +34,15 @@ class PopupWindow(QWidget):
         screen = QGuiApplication.screenAt(cursor_pos) or QGuiApplication.primaryScreen()
         screen_geo = screen.availableGeometry()
 
-        x = min(cursor_pos.x(), screen_geo.right() - self.WIDTH)
-        y = min(cursor_pos.y(), screen_geo.bottom() - self.HEIGHT)
+        x = min(cursor_pos.x() + self.CURSOR_OFFSET, screen_geo.right() - self.WIDTH)
+        y = min(cursor_pos.y() + self.CURSOR_OFFSET, screen_geo.bottom() - self.HEIGHT)
         x = max(x, screen_geo.left())
         y = max(y, screen_geo.top())
 
         self.move(x, y)
 
     def keyPressEvent(self, event) -> None:
-        if event.key() == Qt.Key_Escape:
+        if event.key() == Qt.Key.Key_Escape:
             self.close()
         else:
             super().keyPressEvent(event)
