@@ -1,7 +1,8 @@
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QComboBox, QFormLayout, QLineEdit, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QCheckBox, QComboBox, QFormLayout, QLineEdit, QVBoxLayout, QWidget
 
-from ..config import APP_NAME, load_config, save_config
+from .. import startup
+from ..config import APP_NAME, IS_FROZEN, load_config, save_config
 from ..hotkey_listener import qt_event_to_hotkey_string
 from ..translator.languages import AUTO_DETECT, AUTO_DETECT_LABEL, LANGUAGES
 
@@ -68,6 +69,16 @@ class SettingsWindow(QWidget):
         self._hotkey_field = HotkeyCaptureField(config["hotkey"], self)
         self._hotkey_field.hotkey_captured.connect(self._on_hotkey_captured)
 
+        self._startup_checkbox = QCheckBox("Start with Windows", self)
+        if IS_FROZEN:
+            self._startup_checkbox.setChecked(startup.is_enabled())
+            self._startup_checkbox.toggled.connect(self._on_startup_toggled)
+        else:
+            self._startup_checkbox.setEnabled(False)
+            self._startup_checkbox.setToolTip(
+                "Only available in the packaged .exe, not while running from source."
+            )
+
         form = QFormLayout()
         form.addRow("Source language", self._source_combo)
         form.addRow("Target language", self._target_combo)
@@ -75,6 +86,7 @@ class SettingsWindow(QWidget):
 
         layout = QVBoxLayout(self)
         layout.addLayout(form)
+        layout.addWidget(self._startup_checkbox)
 
     @staticmethod
     def _set_combo_value(combo: QComboBox, code: str) -> None:
@@ -99,11 +111,19 @@ class SettingsWindow(QWidget):
         save_config(config)
         self._hotkey_listener.set_hotkey(hotkey)
 
+    def _on_startup_toggled(self, checked: bool) -> None:
+        if checked:
+            startup.enable()
+        else:
+            startup.disable()
+
     def open(self) -> None:
         config = load_config()
         self._set_combo_value(self._source_combo, config["source_lang"])
         self._set_combo_value(self._target_combo, config["target_lang"])
         self._hotkey_field.set_current(config["hotkey"])
+        if IS_FROZEN:
+            self._startup_checkbox.setChecked(startup.is_enabled())
 
         self.show()
         self.activateWindow()
