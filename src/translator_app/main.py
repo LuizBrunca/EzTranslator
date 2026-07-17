@@ -3,11 +3,12 @@ import sys
 from PySide6.QtWidgets import QApplication, QMessageBox
 
 from . import single_instance
-from .config import APP_NAME
-from .hotkey_listener import DEFAULT_HOTKEY, HotkeyListener
+from .config import APP_NAME, load_config
+from .hotkey_listener import HotkeyListener
 from .logger import Logger
 from .tray import TrayIcon
 from .ui.popup import PopupWindow
+from .ui.settings import SettingsWindow
 
 logger = Logger(APP_NAME, "app")
 
@@ -26,15 +27,19 @@ def main() -> None:
 
     logger.info("Startup", "Application starting.")
 
-    tray = TrayIcon(app)
-    tray.show()
+    config = load_config()
 
     popup = PopupWindow()
 
-    hotkey_listener = HotkeyListener()
+    hotkey_listener = HotkeyListener(config["hotkey"])
     hotkey_listener.triggered.connect(popup.toggle)
     hotkey_listener.start()
-    logger.info("Hotkey", f"Global hotkey listener started ({DEFAULT_HOTKEY}).")
+    logger.info("Hotkey", f"Global hotkey listener started ({config['hotkey']}).")
+
+    settings_window = SettingsWindow(hotkey_listener)
+
+    tray = TrayIcon(app, popup, settings_window)
+    tray.show()
 
     exit_code = app.exec()
 

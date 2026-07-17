@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ..translator.engine import DEFAULT_TARGET
+from ..config import load_config, save_config
 from ..translator.languages import AUTO_DETECT, AUTO_DETECT_LABEL, LANGUAGES
 from ..translator.worker import TranslationWorker
 
@@ -34,11 +34,14 @@ class PopupWindow(QWidget):
         self._worker: TranslationWorker | None = None
         self._ignore_deactivate = False
 
+        config = load_config()
+
         self._source_combo = QComboBox(self)
         self._source_combo.addItem(AUTO_DETECT_LABEL, AUTO_DETECT)
         for name, code in LANGUAGES.items():
             self._source_combo.addItem(name, code)
-        self._source_combo.currentIndexChanged.connect(self._update_swap_enabled)
+        self._set_combo_value(self._source_combo, config["source_lang"])
+        self._source_combo.currentIndexChanged.connect(self._on_source_changed)
 
         self._swap_button = QPushButton("⇆", self)
         self._swap_button.setFixedWidth(32)
@@ -47,9 +50,8 @@ class PopupWindow(QWidget):
         self._target_combo = QComboBox(self)
         for name, code in LANGUAGES.items():
             self._target_combo.addItem(name, code)
-        default_target_index = self._target_combo.findData(DEFAULT_TARGET)
-        if default_target_index != -1:
-            self._target_combo.setCurrentIndex(default_target_index)
+        self._set_combo_value(self._target_combo, config["target_lang"])
+        self._target_combo.currentIndexChanged.connect(self._on_target_changed)
 
         lang_row = QHBoxLayout()
         lang_row.addWidget(self._source_combo, stretch=1)
@@ -83,6 +85,7 @@ class PopupWindow(QWidget):
         if self.isVisible():
             self.close()
         else:
+            self._sync_language_combos_from_config()
             self._fill_from_clipboard()
             self._move_to_cursor()
             self._ignore_deactivate = True
@@ -94,6 +97,17 @@ class PopupWindow(QWidget):
 
     def _stop_ignoring_deactivate(self) -> None:
         self._ignore_deactivate = False
+
+    def _sync_language_combos_from_config(self) -> None:
+        config = load_config()
+        self._set_combo_value(self._source_combo, config["source_lang"])
+        self._set_combo_value(self._target_combo, config["target_lang"])
+
+    @staticmethod
+    def _set_combo_value(combo: QComboBox, code: str) -> None:
+        index = combo.findData(code)
+        if index != -1:
+            combo.setCurrentIndex(index)
 
     def _fill_from_clipboard(self) -> None:
         clipboard_text = QGuiApplication.clipboard().text()
@@ -125,6 +139,19 @@ class PopupWindow(QWidget):
 
     def _update_swap_enabled(self) -> None:
         self._swap_button.setEnabled(self._current_source() != AUTO_DETECT)
+
+    def _on_source_changed(self) -> None:
+        self._update_swap_enabled()
+        self._save_language_prefs()
+
+    def _on_target_changed(self) -> None:
+        self._save_language_prefs()
+
+    def _save_language_prefs(self) -> None:
+        config = load_config()
+        config["source_lang"] = self._current_source()
+        config["target_lang"] = self._current_target()
+        save_config(config)
 
     def _on_swap_clicked(self) -> None:
         source_code = self._current_source()
