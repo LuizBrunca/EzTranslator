@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "deep-translator>=1.11.4",
     "pynput>=1.8.2",
     "pyside6>=6.11.1",
 ]
