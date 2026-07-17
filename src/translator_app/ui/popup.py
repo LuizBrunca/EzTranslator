@@ -19,6 +19,7 @@ class PopupWindow(QWidget):
     WIDTH = 420
     HEIGHT = 220
     CURSOR_OFFSET = 16
+    DEBOUNCE_MS = 500
 
     def __init__(self):
         super().__init__()
@@ -58,9 +59,15 @@ class PopupWindow(QWidget):
         lang_row.addWidget(self._swap_button)
         lang_row.addWidget(self._target_combo, stretch=1)
 
+        self._debounce_timer = QTimer(self)
+        self._debounce_timer.setSingleShot(True)
+        self._debounce_timer.setInterval(self.DEBOUNCE_MS)
+        self._debounce_timer.timeout.connect(self._on_translate_requested)
+
         self._input = QLineEdit(self)
-        self._input.setPlaceholderText("Type text and press Enter...")
+        self._input.setPlaceholderText("Type to translate...")
         self._input.returnPressed.connect(self._on_translate_requested)
+        self._input.textChanged.connect(lambda: self._debounce_timer.start())
 
         self._output = QLabel(self)
         self._output.setWordWrap(True)
@@ -111,7 +118,9 @@ class PopupWindow(QWidget):
 
     def _fill_from_clipboard(self) -> None:
         clipboard_text = QGuiApplication.clipboard().text()
+        self._input.blockSignals(True)
         self._input.setText(clipboard_text)
+        self._input.blockSignals(False)
         if clipboard_text.strip():
             self._on_translate_requested()
         else:
@@ -166,7 +175,9 @@ class PopupWindow(QWidget):
             self._target_combo.setCurrentIndex(new_target_index)
 
         if self._copy_button.isEnabled():  # there's a real translation result to carry over
+            self._input.blockSignals(True)
             self._input.setText(self._output.text())
+            self._input.blockSignals(False)
             self._on_translate_requested()
 
     def _on_translate_requested(self) -> None:
@@ -208,6 +219,10 @@ class PopupWindow(QWidget):
             self.close()
         else:
             super().keyPressEvent(event)
+
+    def closeEvent(self, event) -> None:
+        self._debounce_timer.stop()
+        super().closeEvent(event)
 
     def changeEvent(self, event) -> None:
         if (
