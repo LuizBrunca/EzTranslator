@@ -1,0 +1,19 @@
+[project]
+name = "translator-app"
+version = "0.1.0"
+description = "Background desktop translator with global hotkey and system tray icon"
+readme = "README.md"
+authors = [
+    { name = "Luiz Brunca", email = "luizhenriquebrunca@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pyside6>=6.11.1",
+]
+
+[project.scripts]
+translator-app = "translator_app.main:main"
+
+[build-system]
+requires = ["uv_build>=0.11.29,<0.12.0"]
+build-backend = "uv_build"
