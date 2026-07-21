@@ -27,6 +27,15 @@ Baixe o `EzTranslator.exe` na [última release](https://github.com/LuizBrunca/Ez
 
 Pra iniciar o EzTranslator automaticamente no login, ative **Start with Windows** nas Configurações (menu da bandeja).
 
+## Atualizando
+
+1. Feche o EzTranslator primeiro (clique direito no ícone da bandeja → **Quit**) — o Windows não deixa sobrescrever um `.exe` em execução.
+2. Baixe o novo `EzTranslator.exe` na [última release](https://github.com/LuizBrunca/EzTranslator/releases/latest).
+3. Substitua o arquivo antigo pelo novo, **no mesmo caminho e com o mesmo nome**.
+4. Execute. Configurações, idiomas salvos e seu atalho personalizado continuam intactos — ficam em `%LOCALAPPDATA%\EzTranslator\`, separado do executável.
+
+Se o **Start with Windows** estiver ativado, ele aponta pro caminho exato do `.exe` — sobrescrevendo no mesmo lugar, continua funcionando sem precisar fazer mais nada. Se você salvar o novo download em outro lugar (pasta ou nome diferente), desative e reative o **Start with Windows** nas Configurações pra ele apontar pro novo local.
+
 ## Desenvolvimento
 
 Precisa do [uv](https://docs.astral.sh/uv/) e Python 3.12+.
