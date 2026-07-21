@@ -10,6 +10,7 @@ __pycache__/
 # Packaging / build output
 build/
 dist/
+installer_output/
 
 # IDE
 .vscode/
