@@ -3,9 +3,9 @@ from PySide6.QtGui import QCursor, QGuiApplication, QPainterPath, QRegion
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
-    QLabel,
     QLineEdit,
     QPushButton,
+    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -39,13 +39,13 @@ class PopupWindow(QWidget):
                 font-size: 13px;
                 font-weight: 500;
             }
-            QLineEdit, QComboBox {
+            QLineEdit, QComboBox, QTextEdit {
                 background-color: #2a2a2a;
                 border: 1px solid #3a3a3a;
                 border-radius: 6px;
                 padding: 6px 8px;
             }
-            QLineEdit:focus {
+            QLineEdit:focus, QTextEdit:focus {
                 border: 1px solid #5b8def;
             }
             QLineEdit::placeholder {
@@ -83,9 +83,30 @@ class PopupWindow(QWidget):
             QPushButton#swapButton:enabled {
                 color: #5b8def;
             }
-            QLabel#outputLabel {
+            QTextEdit#outputText {
                 font-size: 15px;
                 font-weight: 500;
+            }
+            QScrollBar:vertical {
+                background: transparent;
+                width: 8px;
+                margin: 0px;
+            }
+            QScrollBar::handle:vertical {
+                background: #4a4a4a;
+                border-radius: 4px;
+                min-height: 24px;
+            }
+            QScrollBar::handle:vertical:hover {
+                background: #5b8def;
+            }
+            QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+                height: 0px;
+                subcontrol-position: bottom;
+                subcontrol-origin: margin;
+            }
+            QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+                background: none;
             }
             """
         )
@@ -103,7 +124,7 @@ class PopupWindow(QWidget):
         self._set_combo_value(self._source_combo, config["source_lang"])
         self._source_combo.currentIndexChanged.connect(self._on_source_changed)
 
-        self._swap_button = QPushButton("⇆", self)
+        self._swap_button = QPushButton("↔", self)
         self._swap_button.setObjectName("swapButton")
         self._swap_button.setFixedSize(32, 32)
         self._swap_button.clicked.connect(self._on_swap_clicked)
@@ -129,10 +150,10 @@ class PopupWindow(QWidget):
         self._input.returnPressed.connect(self._on_translate_requested)
         self._input.textChanged.connect(lambda: self._debounce_timer.start())
 
-        self._output = QLabel(self)
-        self._output.setObjectName("outputLabel")
-        self._output.setWordWrap(True)
-        self._output.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        self._output = QTextEdit(self)
+        self._output.setObjectName("outputText")
+        self._output.setReadOnly(True)
+        self._output.setLineWrapMode(QTextEdit.LineWrapMode.WidgetWidth)
 
         self._copy_button = QPushButton("Copy", self)
         self._copy_button.setEnabled(False)
@@ -253,7 +274,7 @@ class PopupWindow(QWidget):
 
         if self._copy_button.isEnabled():  # there's a real translation result to carry over
             self._input.blockSignals(True)
-            self._input.setText(self._output.text())
+            self._input.setText(self._output.toPlainText())
             self._input.blockSignals(False)
             self._on_translate_requested()
 
@@ -266,7 +287,7 @@ class PopupWindow(QWidget):
             return
 
         self._output.setStyleSheet("")
-        self._output.setText("Translating...")
+        self._output.setPlainText("Translating...")
         self._copy_button.setEnabled(False)
 
         self._worker = TranslationWorker(text, self._current_source(), self._current_target())
@@ -276,18 +297,18 @@ class PopupWindow(QWidget):
         self._worker.start()
 
     def _on_translated(self, result: str) -> None:
-        self._output.setText(result)
+        self._output.setPlainText(result)
         self._copy_button.setEnabled(True)
 
     def _on_translation_failed(self, message: str) -> None:
         self._output.setStyleSheet("color: #ff8080;")
-        self._output.setText(f"Error: {message}")
+        self._output.setPlainText(f"Error: {message}")
 
     def _on_worker_done(self) -> None:
         self._worker = None
 
     def _on_copy_clicked(self) -> None:
-        QGuiApplication.clipboard().setText(self._output.text())
+        QGuiApplication.clipboard().setText(self._output.toPlainText())
         self._copy_button.setText("Copied!")
         QTimer.singleShot(1200, lambda: self._copy_button.setText("Copy"))
 
@@ -316,6 +337,12 @@ class PopupWindow(QWidget):
     def keyPressEvent(self, event) -> None:
         if event.key() == Qt.Key.Key_Escape:
             self.close()
+        elif (
+            event.key() == Qt.Key.Key_S
+            and event.modifiers() == Qt.KeyboardModifier.ControlModifier
+        ):
+            if self._swap_button.isEnabled():
+                self._on_swap_clicked()
         else:
             super().keyPressEvent(event)
 
