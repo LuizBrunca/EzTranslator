@@ -23,3 +23,10 @@ class TrayIcon(QSystemTrayIcon):
         quit_action.triggered.connect(app.quit)
 
         self.setContextMenu(menu)
+
+        self._popup = popup
+        self.activated.connect(self._on_activated)
+
+    def _on_activated(self, reason: QSystemTrayIcon.ActivationReason) -> None:
+        if reason == QSystemTrayIcon.ActivationReason.Trigger:
+            self._popup.toggle()
