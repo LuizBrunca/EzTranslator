@@ -11,12 +11,12 @@
 
 > Tradução rápida, prática, e que não deixa rastro nenhum.
 >
-> Criei o **EzTranslator**: aperta um atalho (Shift+Alt+T) em qualquer lugar do Windows e a tradução aparece na hora, num popup discreto perto do cursor. Sem abrir navegador, sem trocar de janela, sem cadastro — e nada do que você traduz fica salvo ou logado em lugar nenhum, nunca.
+> Criei o **EzTranslator**: aperta um atalho (Shift+Alt+T) em qualquer lugar do Windows e um popup discreto abre perto do cursor, pronto pra traduzir. Sem abrir navegador, sem trocar de janela, sem cadastro — e nada do que você traduz fica salvo ou logado em lugar nenhum, nunca.
 >
 > Alguns detalhes que fizeram diferença pra mim:
-> - Pega o texto direto do que você copiou, sem precisar colar em lugar nenhum
 > - Detecta o idioma de origem automaticamente
 > - Traduz enquanto você digita (com um pequeno delay), sem precisar clicar em nada
+> - Também pega o texto direto do que você copiou, se preferir nem digitar
 > - Botão de copiar e de inverter idiomas
 > - Efêmero por design: fecha e some, sem histórico, sem log, sem rastro
 > - Gratuito, sem chave de API, um único .exe pra instalar
@@ -29,12 +29,12 @@
 
 > Fast, practical translation that leaves no trace.
 >
-> Built **EzTranslator**: hit a global hotkey (Shift+Alt+T) anywhere on Windows and the translation shows up instantly, in a small popup near your cursor. No browser tab, no window to switch to, no sign-up — and nothing you translate is ever logged or stored, anywhere.
+> Built **EzTranslator**: hit a global hotkey (Shift+Alt+T) anywhere on Windows and a small popup opens near your cursor, ready to translate. No browser tab, no window to switch to, no sign-up — and nothing you translate is ever logged or stored, anywhere.
 >
 > A few things I cared about while building it:
-> - Picks up whatever you've already copied — no pasting into anything
 > - Auto-detects the source language
 > - Translates as you type (debounced), no extra clicks
+> - Also picks up whatever you've already copied, if you'd rather not type at all
 > - Copy button + quick language swap
 > - Ephemeral by design: closes and it's gone — no history, no logs, no trace
 > - Free, no API key, single-file .exe
@@ -57,12 +57,13 @@ Um bom Project no LinkedIn segue: problema → o que foi feito → decisões té
 
 > Cansado de abrir uma aba nova toda vez que precisava traduzir uma frase curta (email, chat, texto comentado), projetei e implementei sozinho o EzTranslator: um app que vive na bandeja do Windows e entrega tradução instantânea via atalho global, sem deixar rastro do que foi traduzido.
 >
-> Dois princípios guiaram o design: **prática** — atalho global, sem colar em lugar nenhum, sem abrir navegador, sem clique extra — e **efêmera** — nenhuma tradução é logada, salva em histórico ou persistida em disco. O app existe pra resolver o momento e some.
+> Dois princípios guiaram o design: **prática** — atalho global, popup perto do cursor, sem abrir navegador, sem clique extra, aceitando tanto texto digitado quanto o que já está no clipboard — e **efêmera** — nenhuma tradução é logada, salva em histórico ou persistida em disco. O app existe pra resolver o momento e some.
 >
 > Principais decisões técnicas:
 > - PySide6 para uma UI nativa e responsiva
 > - QThread para rodar a tradução em background sem travar a interface
 > - pynput para captura de hotkey global
+> - Leitura opcional do clipboard como um dos jeitos de entrada, ao lado da digitação direta
 > - PyInstaller + Inno Setup para empacotar como .exe único com instalador
 > - Arquitetura 100% efêmera por design — nada é logado ou persistido além das configurações do usuário
 >
