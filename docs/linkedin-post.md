@@ -9,9 +9,9 @@
 
 ## Versão PT-BR (foco em prática + efêmera)
 
-> Tradução rápida, prática, e que não deixa rastro nenhum.
+> Tradução instantânea, em qualquer lugar do seu Windows, com um popup dinâmico.
 >
-> Criei o **EzTranslator**: aperta um atalho (Shift+Alt+T) em qualquer lugar do Windows e um popup discreto abre perto do cursor, pronto pra traduzir. Sem abrir navegador, sem trocar de janela, sem cadastro — e nada do que você traduz fica salvo ou logado em lugar nenhum, nunca.
+> Criei o **EzTranslator**: aperta um atalho (Shift+Alt+T) e um popup discreto abre perto do cursor, pronto pra traduzir na hora. Sem abrir navegador, sem trocar de janela, sem cadastro — e nada do que você traduz fica salvo ou logado em lugar nenhum, nunca.
 >
 > Alguns detalhes que fizeram diferença pra mim:
 > - Detecta o idioma de origem automaticamente
@@ -27,9 +27,9 @@
 
 ## English version (dev/open-source angle)
 
-> Fast, practical translation that leaves no trace.
+> Instant translation, anywhere on Windows, in a dynamic popup.
 >
-> Built **EzTranslator**: hit a global hotkey (Shift+Alt+T) anywhere on Windows and a small popup opens near your cursor, ready to translate. No browser tab, no window to switch to, no sign-up — and nothing you translate is ever logged or stored, anywhere.
+> Built **EzTranslator**: hit a global hotkey (Shift+Alt+T) and a small popup opens right next to your cursor, ready to translate. No browser tab, no window to switch to, no sign-up — and nothing you translate is ever logged or stored, anywhere.
 >
 > A few things I cared about while building it:
 > - Auto-detects the source language
@@ -51,13 +51,13 @@
 
 Um bom Project no LinkedIn segue: problema → o que foi feito → decisões técnicas → resultado. É isso que recrutadores e conexões técnicas procuram, não uma lista de features.
 
-**Nome do projeto:** EzTranslator — Fast, Ephemeral Translation for Windows
+**Nome do projeto:** EzTranslator — Instant Translation, Anywhere on Windows
 
 **Descrição:**
 
-> Cansado de abrir uma aba nova toda vez que precisava traduzir uma frase curta (email, chat, texto comentado), projetei e implementei sozinho o EzTranslator: um app que vive na bandeja do Windows e entrega tradução instantânea via atalho global, sem deixar rastro do que foi traduzido.
+> Cansado de abrir uma aba nova toda vez que precisava traduzir uma frase curta (email, chat, texto comentado), projetei e implementei sozinho o EzTranslator: tradução instantânea, em qualquer lugar do Windows, através de um popup dinâmico que aparece perto do cursor sem deixar rastro do que foi traduzido.
 >
-> Dois princípios guiaram o design: **prática** — atalho global, popup perto do cursor, sem abrir navegador, sem clique extra, aceitando tanto texto digitado quanto o que já está no clipboard — e **efêmera** — nenhuma tradução é logada, salva em histórico ou persistida em disco. O app existe pra resolver o momento e some.
+> Dois princípios guiaram o design: **prática** — atalho global, popup dinâmico perto do cursor, sem abrir navegador, sem clique extra, aceitando tanto texto digitado quanto o que já está no clipboard — e **efêmera** — nenhuma tradução é logada, salva em histórico ou persistida em disco. O app existe pra resolver o momento e some.
 >
 > Principais decisões técnicas:
 > - PySide6 para uma UI nativa e responsiva
