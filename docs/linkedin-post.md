@@ -18,6 +18,7 @@
 > Alguns detalhes que fizeram diferença pra mim:
 > - Detecta o idioma de origem automaticamente
 > - Traduz enquanto você digita (com um pequeno delay), sem precisar clicar em nada
+> - Do atalho ao resultado, as mãos não saem do teclado
 > - Também pega o texto direto do que você copiou, se preferir nem digitar
 > - Botão de copiar e de inverter idiomas
 > - Efêmero por design: fecha e some, sem histórico, sem log, sem rastro
@@ -39,6 +40,7 @@
 > A few things I cared about while building it:
 > - Auto-detects the source language
 > - Translates as you type (debounced), no extra clicks
+> - From hotkey to result, your hands never leave the keyboard
 > - Also picks up whatever you've already copied, if you'd rather not type at all
 > - Copy button + quick language swap
 > - Ephemeral by design: closes and it's gone — no history, no logs, no trace
