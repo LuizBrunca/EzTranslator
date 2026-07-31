@@ -44,3 +44,30 @@
 ## CTA nos comentários (evita que o LinkedIn penalize o alcance de posts com link)
 
 > Repositório e download: https://github.com/LuizBrunca/EzTranslator
+
+## Seção "Projetos" do perfil
+
+Um bom Project no LinkedIn segue: problema → o que foi feito → decisões técnicas → resultado. É isso que recrutadores e conexões técnicas procuram, não uma lista de features.
+
+**Nome do projeto:** EzTranslator — Instant Clipboard Translator for Windows
+
+**Descrição:**
+
+> Cansado de abrir uma aba nova toda vez que precisava traduzir uma frase curta (email, chat, texto comentado), projetei e implementei sozinho o EzTranslator: um app que vive na bandeja do Windows e traduz o clipboard instantaneamente via atalho global.
+>
+> Principais decisões técnicas:
+> - PySide6 para uma UI nativa e responsiva
+> - QThread para rodar a tradução em background sem travar a interface
+> - pynput para captura de hotkey global
+> - PyInstaller + Inno Setup para empacotar como .exe único com instalador
+> - Arquitetura 100% efêmera — nenhuma tradução é logada ou persistida
+>
+> Resultado: utilitário gratuito, sem API key, sem telemetria, open source.
+
+**Skills/tags:** Python · PySide6 · Desktop Application Development · Software Architecture · Open Source · PyInstaller
+
+**Mídia:** o mesmo GIF/screenshot do popup em ação sugerido para o post — reaproveita.
+
+**URL:** https://github.com/LuizBrunca/EzTranslator
+
+**Período:** data de início do projeto até hoje (ou "em andamento" se ainda mantém ativamente).
