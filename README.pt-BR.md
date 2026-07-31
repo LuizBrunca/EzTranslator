@@ -2,32 +2,42 @@
 
 # EzTranslator
 
-Um tradutor leve que roda em segundo plano no Windows. Aperte um atalho global de qualquer lugar, e um pequeno popup traduz o que estiver na sua área de transferência — sem abrir janela, sem trocar de aba do navegador.
+Tradução instantânea, num popup dinâmico, em qualquer lugar do seu PC. Aperte um atalho global de qualquer lugar e um pequeno popup abre perto do cursor — do atalho ao resultado, as mãos não saem do teclado.
+
+<!-- TODO: adicionar um GIF/screenshot do popup em ação aqui -->
 
 ## Funcionalidades
 
 - Fica na bandeja do sistema, inicia na hora, não atrapalha
 - Atalho global (padrão **Shift+Alt+T**, personalizável) abre um popup perto do cursor
-- Lê a área de transferência automaticamente e já traduz na hora
 - Detecta o idioma de origem sozinho, ou você escolhe manualmente no menu
-- Botão de troca rápida pra inverter origem/destino
 - Traduz sozinho enquanto você digita (depois de uma pausa curta) ou ao apertar Enter — sem cliques extras
+- `Ctrl+S` troca origem/destino na hora com o popup já aberto (ou use o botão de troca)
+- Também lê a área de transferência automaticamente, se preferir nem digitar
 - Botão de copiar pra pegar o resultado
 - Fecha com `Esc` ou clicando fora do popup
 - Tela de Configurações: idiomas padrão, captura de atalho (clica no campo, aperta a combinação nova), iniciar com o Windows
 - Totalmente efêmero — nada sobre suas traduções é logado, salvo ou guardado em histórico
+- Disponível atualmente só para Windows
 
 A tradução usa o Google Translate (via [deep-translator](https://github.com/nidhaloff/deep-translator)), gratuito, sem precisar de chave de API.
 
 ## Instalação
 
-Baixe o `EzTranslator.exe` na [última release](https://github.com/LuizBrunca/EzTranslator/releases/latest) e execute. Sem instalador, sem configuração — é um executável único.
+Pegue a última release na [página de releases](https://github.com/LuizBrunca/EzTranslator/releases/latest) — duas opções:
 
-> **Nota:** como o executável não é assinado digitalmente, o Windows Defender SmartScreen pode avisar na primeira execução ("O Windows protegeu seu PC"). Clique em **Mais informações** → **Executar assim mesmo**.
+- **`EzTranslator-Setup-x.x.x.exe`** (recomendado): um instalador de verdade — atalho no menu Iniciar, ícone opcional na área de trabalho, desinstalação limpa.
+- **`EzTranslator.exe`**: um executável único e portável, sem passo de instalação, é só executar.
+
+> **Nota:** como nenhum dos dois é assinado digitalmente, o Windows Defender SmartScreen pode avisar na primeira execução ("O Windows protegeu seu PC"). Clique em **Mais informações** → **Executar assim mesmo**.
 
 Pra iniciar o EzTranslator automaticamente no login, ative **Start with Windows** nas Configurações (menu da bandeja).
 
 ## Atualizando
+
+**Se você usou o instalador:** é só rodar o novo `EzTranslator-Setup-x.x.x.exe` — ele fecha o app em execução e sobrescreve a instalação no mesmo lugar.
+
+**Se você está na versão portátil:**
 
 1. Feche o EzTranslator primeiro (clique direito no ícone da bandeja → **Quit**) — o Windows não deixa sobrescrever um `.exe` em execução.
 2. Baixe o novo `EzTranslator.exe` na [última release](https://github.com/LuizBrunca/EzTranslator/releases/latest).
