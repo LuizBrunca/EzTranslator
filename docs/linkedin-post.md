@@ -9,7 +9,9 @@
 
 ## Versão PT-BR (foco em prática + efêmera)
 
-> Tradução instantânea, em qualquer lugar do seu Windows, com um popup dinâmico.
+> Tradução instantânea.
+> Popup dinâmico.
+> Em qualquer lugar do seu PC.
 >
 > Criei o **EzTranslator**: aperta um atalho (Shift+Alt+T) e um popup discreto abre perto do cursor, pronto pra traduzir na hora. Sem abrir navegador, sem trocar de janela, sem cadastro — e nada do que você traduz fica salvo ou logado em lugar nenhum, nunca.
 >
@@ -20,6 +22,7 @@
 > - Botão de copiar e de inverter idiomas
 > - Efêmero por design: fecha e some, sem histórico, sem log, sem rastro
 > - Gratuito, sem chave de API, um único .exe pra instalar
+> - Disponível atualmente só para Windows
 >
 > É open source, feito em Python (PySide6 + PyInstaller). Link do repositório e do download nos comentários. Feedback é muito bem-vindo!
 >
@@ -27,7 +30,9 @@
 
 ## English version (dev/open-source angle)
 
-> Instant translation, anywhere on Windows, in a dynamic popup.
+> Instant translation.
+> Dynamic popup.
+> Anywhere on your PC.
 >
 > Built **EzTranslator**: hit a global hotkey (Shift+Alt+T) and a small popup opens right next to your cursor, ready to translate. No browser tab, no window to switch to, no sign-up — and nothing you translate is ever logged or stored, anywhere.
 >
@@ -38,6 +43,7 @@
 > - Copy button + quick language swap
 > - Ephemeral by design: closes and it's gone — no history, no logs, no trace
 > - Free, no API key, single-file .exe
+> - Currently Windows only
 
 > Open source, built with Python (PySide6, PyInstaller), translation via Google Translate (deep-translator). Repo + download link in the comments — feedback and contributions welcome.
 >
@@ -51,11 +57,11 @@
 
 Um bom Project no LinkedIn segue: problema → o que foi feito → decisões técnicas → resultado. É isso que recrutadores e conexões técnicas procuram, não uma lista de features.
 
-**Nome do projeto:** EzTranslator — Instant Translation, Anywhere on Windows
+**Nome do projeto:** EzTranslator — Tradução Instantânea, Popup Dinâmico, em Qualquer Lugar do seu PC
 
 **Descrição:**
 
-> Cansado de abrir uma aba nova toda vez que precisava traduzir uma frase curta (email, chat, texto comentado), projetei e implementei sozinho o EzTranslator: tradução instantânea, em qualquer lugar do Windows, através de um popup dinâmico que aparece perto do cursor sem deixar rastro do que foi traduzido.
+> Cansado de abrir uma aba nova toda vez que precisava traduzir uma frase curta (email, chat, texto comentado), projetei e implementei sozinho o EzTranslator: tradução instantânea, num popup dinâmico que aparece perto do cursor em qualquer lugar do seu PC, sem deixar rastro do que foi traduzido.
 >
 > Dois princípios guiaram o design: **prática** — atalho global, popup dinâmico perto do cursor, sem abrir navegador, sem clique extra, aceitando tanto texto digitado quanto o que já está no clipboard — e **efêmera** — nenhuma tradução é logada, salva em histórico ou persistida em disco. O app existe pra resolver o momento e some.
 >
@@ -67,7 +73,7 @@ Um bom Project no LinkedIn segue: problema → o que foi feito → decisões té
 > - PyInstaller + Inno Setup para empacotar como .exe único com instalador
 > - Arquitetura 100% efêmera por design — nada é logado ou persistido além das configurações do usuário
 >
-> Resultado: utilitário gratuito, sem API key, sem telemetria, open source.
+> Resultado: utilitário gratuito, sem API key, sem telemetria, open source. **Disponível atualmente só para Windows** — outras plataformas não fazem parte do escopo por enquanto.
 
 **Skills/tags:** Python · PySide6 · Desktop Application Development · Software Architecture · Open Source · PyInstaller
 
