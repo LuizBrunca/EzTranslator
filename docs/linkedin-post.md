@@ -65,7 +65,7 @@ Um bom Project no LinkedIn segue: problema → o que foi feito → decisões té
 
 > Cansado de abrir uma aba nova toda vez que precisava traduzir uma frase curta (email, chat, texto comentado), projetei e implementei sozinho o EzTranslator: tradução instantânea, num popup dinâmico que aparece perto do cursor em qualquer lugar do seu PC, sem deixar rastro do que foi traduzido.
 >
-> Dois princípios guiaram o design: **prática** — atalho global, popup dinâmico perto do cursor, sem abrir navegador, sem clique extra, aceitando tanto texto digitado quanto o que já está no clipboard — e **efêmera** — nenhuma tradução é logada, salva em histórico ou persistida em disco. O app existe pra resolver o momento e some.
+> Dois princípios guiaram o design: **prática** — atalho global, popup dinâmico perto do cursor, sem abrir navegador, do atalho ao resultado sem tirar as mãos do teclado, aceitando tanto texto digitado quanto o que já está no clipboard — e **efêmera** — nenhuma tradução é logada, salva em histórico ou persistida em disco. O app existe pra resolver o momento e some.
 >
 > Principais decisões técnicas:
 > - PySide6 para uma UI nativa e responsiva
