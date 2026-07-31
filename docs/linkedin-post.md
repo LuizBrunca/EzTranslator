@@ -7,17 +7,18 @@
 - Poste terça a quinta, entre 8h-10h ou 12h-13h (horários de maior engajamento no LinkedIn).
 - Marque a keywords certas: Python, PySide6, open source, produtividade — ajuda o alcance orgânico.
 
-## Versão PT-BR (foco em produto/produtividade)
+## Versão PT-BR (foco em prática + efêmera)
 
-> Cansado de abrir uma aba nova só pra traduzir uma frase?
+> Tradução rápida, prática, e que não deixa rastro nenhum.
 >
-> Criei o **EzTranslator**: um app leve que vive na bandeja do Windows. Aperta um atalho (Shift+Alt+T), ele lê o que você copiou e traduz na hora, num popup pequeno perto do cursor. Sem abrir navegador, sem trocar de janela, sem cadastro.
+> Criei o **EzTranslator**: aperta um atalho (Shift+Alt+T) em qualquer lugar do Windows e a tradução aparece na hora, num popup discreto perto do cursor. Sem abrir navegador, sem trocar de janela, sem cadastro — e nada do que você traduz fica salvo ou logado em lugar nenhum, nunca.
 >
 > Alguns detalhes que fizeram diferença pra mim:
+> - Pega o texto direto do que você copiou, sem precisar colar em lugar nenhum
 > - Detecta o idioma de origem automaticamente
 > - Traduz enquanto você digita (com um pequeno delay), sem precisar clicar em nada
 > - Botão de copiar e de inverter idiomas
-> - 100% efêmero — nada do que você traduz fica salvo ou logado
+> - Efêmero por design: fecha e some, sem histórico, sem log, sem rastro
 > - Gratuito, sem chave de API, um único .exe pra instalar
 >
 > É open source, feito em Python (PySide6 + PyInstaller). Link do repositório e do download nos comentários. Feedback é muito bem-vindo!
@@ -26,15 +27,16 @@
 
 ## English version (dev/open-source angle)
 
-> Built a small tool to stop context-switching for translations.
+> Fast, practical translation that leaves no trace.
 >
-> **EzTranslator** sits in your Windows system tray. Hit a global hotkey (Shift+Alt+T), it reads your clipboard, and a small popup translates it right where your cursor is. No browser tab, no window to open, no sign-up.
+> Built **EzTranslator**: hit a global hotkey (Shift+Alt+T) anywhere on Windows and the translation shows up instantly, in a small popup near your cursor. No browser tab, no window to switch to, no sign-up — and nothing you translate is ever logged or stored, anywhere.
 >
 > A few things I cared about while building it:
+> - Picks up whatever you've already copied — no pasting into anything
 > - Auto-detects the source language
 > - Translates as you type (debounced), no extra clicks
 > - Copy button + quick language swap
-> - Fully ephemeral — nothing is logged or stored
+> - Ephemeral by design: closes and it's gone — no history, no logs, no trace
 > - Free, no API key, single-file .exe
 
 > Open source, built with Python (PySide6, PyInstaller), translation via Google Translate (deep-translator). Repo + download link in the comments — feedback and contributions welcome.
@@ -49,18 +51,20 @@
 
 Um bom Project no LinkedIn segue: problema → o que foi feito → decisões técnicas → resultado. É isso que recrutadores e conexões técnicas procuram, não uma lista de features.
 
-**Nome do projeto:** EzTranslator — Instant Clipboard Translator for Windows
+**Nome do projeto:** EzTranslator — Fast, Ephemeral Translation for Windows
 
 **Descrição:**
 
-> Cansado de abrir uma aba nova toda vez que precisava traduzir uma frase curta (email, chat, texto comentado), projetei e implementei sozinho o EzTranslator: um app que vive na bandeja do Windows e traduz o clipboard instantaneamente via atalho global.
+> Cansado de abrir uma aba nova toda vez que precisava traduzir uma frase curta (email, chat, texto comentado), projetei e implementei sozinho o EzTranslator: um app que vive na bandeja do Windows e entrega tradução instantânea via atalho global, sem deixar rastro do que foi traduzido.
+>
+> Dois princípios guiaram o design: **prática** — atalho global, sem colar em lugar nenhum, sem abrir navegador, sem clique extra — e **efêmera** — nenhuma tradução é logada, salva em histórico ou persistida em disco. O app existe pra resolver o momento e some.
 >
 > Principais decisões técnicas:
 > - PySide6 para uma UI nativa e responsiva
 > - QThread para rodar a tradução em background sem travar a interface
 > - pynput para captura de hotkey global
 > - PyInstaller + Inno Setup para empacotar como .exe único com instalador
-> - Arquitetura 100% efêmera — nenhuma tradução é logada ou persistida
+> - Arquitetura 100% efêmera por design — nada é logado ou persistido além das configurações do usuário
 >
 > Resultado: utilitário gratuito, sem API key, sem telemetria, open source.
 
