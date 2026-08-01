@@ -4,7 +4,7 @@
 
 Instant translation, in a dynamic popup, anywhere on your PC. Press a global hotkey from anywhere and a small popup opens near your cursor — from hotkey to result, your hands never leave the keyboard.
 
-<!-- TODO: add a demo GIF/screenshot of the popup in action here -->
+![EzTranslator translating a selected word in a dynamic popup](docs/EzTranslator.gif)
 
 ## Features
 

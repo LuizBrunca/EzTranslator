@@ -4,7 +4,7 @@
 
 Tradução instantânea, num popup dinâmico, em qualquer lugar do seu PC. Aperte um atalho global de qualquer lugar e um pequeno popup abre perto do cursor — do atalho ao resultado, as mãos não saem do teclado.
 
-<!-- TODO: adicionar um GIF/screenshot do popup em ação aqui -->
+![EzTranslator traduzindo uma palavra selecionada num popup dinâmico](docs/EzTranslator.gif)
 
 ## Funcionalidades
 
