@@ -1,5 +1,5 @@
 #define MyAppName "EzTranslator"
-#define MyAppVersion "0.1.5"
+#define MyAppVersion "0.1.6"
 #define MyAppPublisher "Luiz Brunca"
 #define MyAppURL "https://github.com/LuizBrunca/EzTranslator"
 #define MyAppExeName "EzTranslator.exe"
