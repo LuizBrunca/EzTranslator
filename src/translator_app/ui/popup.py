@@ -1,11 +1,24 @@
-from PySide6.QtCore import QEvent, QRectF, Qt, QTimer
-from PySide6.QtGui import QCursor, QGuiApplication, QPainterPath, QRegion
+from PySide6.QtCore import QEvent, QPointF, QRectF, QSize, Qt, QTimer
+from PySide6.QtGui import (
+    QAction,
+    QColor,
+    QCursor,
+    QGuiApplication,
+    QIcon,
+    QPainter,
+    QPainterPath,
+    QPen,
+    QPixmap,
+    QRegion,
+)
 from PySide6.QtWidgets import (
     QComboBox,
+    QGridLayout,
     QHBoxLayout,
     QLineEdit,
     QPushButton,
     QTextEdit,
+    QToolTip,
     QVBoxLayout,
     QWidget,
 )
@@ -15,12 +28,58 @@ from ..translator.languages import AUTO_DETECT, AUTO_DETECT_LABEL, LANGUAGES
 from ..translator.worker import TranslationWorker
 
 
+def _copy_pixmap(color: str) -> QPixmap:
+    pixmap = QPixmap(16, 16)
+    pixmap.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(pixmap)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    pen = QPen(QColor(color))
+    pen.setWidthF(1.3)
+    painter.setPen(pen)
+    painter.setBrush(Qt.BrushStyle.NoBrush)
+    painter.drawRoundedRect(QRectF(5.5, 1.5, 9, 9), 2, 2)
+    painter.setBrush(QColor("#2a2a2a"))
+    painter.drawRoundedRect(QRectF(1.5, 5.5, 9, 9), 2, 2)
+    painter.end()
+    return pixmap
+
+
+def _copy_icon() -> QIcon:
+    icon = QIcon()
+    icon.addPixmap(_copy_pixmap("#cfcfcf"), QIcon.Mode.Normal)
+    icon.addPixmap(_copy_pixmap("#5b8def"), QIcon.Mode.Active)
+    icon.addPixmap(_copy_pixmap("#555555"), QIcon.Mode.Disabled)
+    return icon
+
+
+def _clear_pixmap(color: str) -> QPixmap:
+    pixmap = QPixmap(14, 14)
+    pixmap.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(pixmap)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    pen = QPen(QColor(color))
+    pen.setWidthF(1.4)
+    pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+    painter.setPen(pen)
+    painter.drawLine(QPointF(3, 3), QPointF(11, 11))
+    painter.drawLine(QPointF(11, 3), QPointF(3, 11))
+    painter.end()
+    return pixmap
+
+
+def _clear_icon() -> QIcon:
+    icon = QIcon()
+    icon.addPixmap(_clear_pixmap("#8a8a8a"), QIcon.Mode.Normal)
+    icon.addPixmap(_clear_pixmap("#cfcfcf"), QIcon.Mode.Active)
+    return icon
+
+
 class PopupWindow(QWidget):
     WIDTH = 420
     HEIGHT = 220
     CURSOR_OFFSET = 16
     DEBOUNCE_MS = 500
-    CORNER_RADIUS = 12
+    CORNER_RADIUS = 20
 
     def __init__(self):
         super().__init__()
@@ -87,6 +146,16 @@ class PopupWindow(QWidget):
                 font-size: 15px;
                 font-weight: 500;
             }
+            QPushButton#copyButton {
+                border: none;
+                background-color: transparent;
+                padding: 0px;
+                margin: 4px 4px 0 0;
+            }
+            QPushButton#copyButton:hover:enabled {
+                background-color: #3a3a3a;
+                border-radius: 4px;
+            }
             QScrollBar:vertical {
                 background: transparent;
                 width: 8px;
@@ -148,27 +217,41 @@ class PopupWindow(QWidget):
         self._input = QLineEdit(self)
         self._input.setPlaceholderText("Type to translate...")
         self._input.returnPressed.connect(self._on_translate_requested)
-        self._input.textChanged.connect(lambda: self._debounce_timer.start())
+        self._input.textChanged.connect(self._on_input_changed)
+
+        self._clear_action = QAction(_clear_icon(), "Clear", self._input)
+        self._clear_action.triggered.connect(self._input.clear)
+        self._clear_action.setVisible(False)
+        self._input.addAction(self._clear_action, QLineEdit.ActionPosition.TrailingPosition)
 
         self._output = QTextEdit(self)
         self._output.setObjectName("outputText")
         self._output.setReadOnly(True)
         self._output.setLineWrapMode(QTextEdit.LineWrapMode.WidgetWidth)
 
-        self._copy_button = QPushButton("Copy", self)
+        self._copy_button = QPushButton(self)
+        self._copy_button.setObjectName("copyButton")
+        self._copy_button.setIcon(_copy_icon())
+        self._copy_button.setIconSize(QSize(14, 14))
+        self._copy_button.setFixedSize(22, 22)
+        self._copy_button.setToolTip("Copy")
         self._copy_button.setEnabled(False)
         self._copy_button.clicked.connect(self._on_copy_clicked)
 
-        output_row = QHBoxLayout()
-        output_row.addWidget(self._output, stretch=1)
-        output_row.addWidget(self._copy_button, alignment=Qt.AlignmentFlag.AlignTop)
+        output_container = QWidget(self)
+        output_grid = QGridLayout(output_container)
+        output_grid.setContentsMargins(0, 0, 0, 0)
+        output_grid.addWidget(self._output, 0, 0)
+        output_grid.addWidget(
+            self._copy_button, 0, 0, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight
+        )
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(14, 14, 14, 14)
         layout.setSpacing(10)
         layout.addLayout(lang_row)
         layout.addWidget(self._input)
-        layout.addLayout(output_row, 1)
+        layout.addWidget(output_container, 1)
 
         self._update_swap_enabled()
 
@@ -210,12 +293,24 @@ class PopupWindow(QWidget):
         self._input.blockSignals(True)
         self._input.setText(clipboard_text)
         self._input.blockSignals(False)
+        self._clear_action.setVisible(bool(clipboard_text))
         if clipboard_text.strip():
             self._on_translate_requested()
         else:
-            self._output.setStyleSheet("")
-            self._output.clear()
-            self._copy_button.setEnabled(False)
+            self._clear_output()
+
+    def _on_input_changed(self, text: str) -> None:
+        self._clear_action.setVisible(bool(text))
+        if text.strip():
+            self._debounce_timer.start()
+        else:
+            self._debounce_timer.stop()
+            self._clear_output()
+
+    def _clear_output(self) -> None:
+        self._output.setStyleSheet("")
+        self._output.clear()
+        self._copy_button.setEnabled(False)
 
     def _move_to_cursor(self) -> None:
         cursor_pos = QCursor.pos()
@@ -272,12 +367,6 @@ class PopupWindow(QWidget):
         self._update_swap_enabled()
         self._save_language_prefs()
 
-        if self._copy_button.isEnabled():  # there's a real translation result to carry over
-            self._input.blockSignals(True)
-            self._input.setText(self._output.toPlainText())
-            self._input.blockSignals(False)
-            self._on_translate_requested()
-
     def _on_translate_requested(self) -> None:
         if self._worker is not None:
             return
@@ -309,8 +398,11 @@ class PopupWindow(QWidget):
 
     def _on_copy_clicked(self) -> None:
         QGuiApplication.clipboard().setText(self._output.toPlainText())
-        self._copy_button.setText("Copied!")
-        QTimer.singleShot(1200, lambda: self._copy_button.setText("Copy"))
+        QToolTip.showText(
+            self._copy_button.mapToGlobal(self._copy_button.rect().bottomRight()),
+            "Copied!",
+            self._copy_button,
+        )
 
     def _apply_rounded_mask(self) -> None:
         # Called once, right after setFixedSize — the window can never resize
@@ -343,6 +435,11 @@ class PopupWindow(QWidget):
         ):
             if self._swap_button.isEnabled():
                 self._on_swap_clicked()
+        elif (
+            event.key() == Qt.Key.Key_D
+            and event.modifiers() == Qt.KeyboardModifier.ControlModifier
+        ):
+            self._input.clear()
         else:
             super().keyPressEvent(event)
 

@@ -13,8 +13,10 @@ Tradução instantânea, num popup dinâmico, em qualquer lugar do seu PC. Apert
 - Detecta o idioma de origem sozinho, ou você escolhe manualmente no menu
 - Traduz sozinho enquanto você digita (depois de uma pausa curta) ou ao apertar Enter — sem cliques extras
 - `Ctrl+S` troca origem/destino na hora com o popup já aberto (ou use o botão de troca)
+- Apaga o campo de digitação na hora com o botão `×` embutido ou `Ctrl+D`
 - Também lê a área de transferência automaticamente, se preferir nem digitar
-- Botão de copiar pra pegar o resultado
+- Botão de copiar no campo de resultado, com uma confirmação rápida "Copied!"
+- Traduções longas rolam em vez de vazar pra fora do popup
 - Fecha com `Esc` ou clicando fora do popup
 - Tela de Configurações: idiomas padrão, captura de atalho (clica no campo, aperta a combinação nova), iniciar com o Windows
 - Totalmente efêmero — nada sobre suas traduções é logado, salvo ou guardado em histórico

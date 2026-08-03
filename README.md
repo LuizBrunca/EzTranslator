@@ -13,8 +13,10 @@ Instant translation, in a dynamic popup, anywhere on your PC. Press a global hot
 - Auto-detects the source language, or pick one manually from the dropdown
 - Auto-translates as you type (after a short pause) or on Enter — no extra clicks
 - `Ctrl+S` swaps source/target instantly while the popup is open (or use the swap button)
+- Clear the input instantly with the inline `×` button or `Ctrl+D`
 - Also reads your clipboard automatically, if you'd rather not type at all
-- Copy button to grab the result
+- Copy button on the result field, with a quick "Copied!" confirmation
+- Long translations scroll instead of spilling out of the popup
 - Closes on `Esc` or by clicking outside the popup
 - Settings window: default languages, hotkey capture (click the field, press the new combo), start-with-Windows toggle
 - Fully ephemeral — nothing about your translations is logged, stored, or kept in any history
