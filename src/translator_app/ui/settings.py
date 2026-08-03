@@ -1,5 +1,13 @@
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QCheckBox, QComboBox, QFormLayout, QLineEdit, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QFormLayout,
+    QLabel,
+    QLineEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 from .. import startup
 from ..config import APP_NAME, IS_FROZEN, load_config, save_config
@@ -48,7 +56,7 @@ class SettingsWindow(QWidget):
     def __init__(self, hotkey_listener):
         super().__init__()
         self.setWindowTitle(f"{APP_NAME} — Settings")
-        self.resize(360, 160)
+        self.resize(360, 220)
 
         self._hotkey_listener = hotkey_listener
         config = load_config()
@@ -84,9 +92,19 @@ class SettingsWindow(QWidget):
         form.addRow("Target language", self._target_combo)
         form.addRow("Global hotkey", self._hotkey_field)
 
+        shortcuts_label = QLabel(
+            "While the popup is open:\n"
+            "Ctrl+S — swap source/target languages\n"
+            "Ctrl+D — clear the input\n"
+            "Ctrl+C — copy the translation result",
+            self,
+        )
+        shortcuts_label.setStyleSheet("color: #444444; font-size: 11px;")
+
         layout = QVBoxLayout(self)
         layout.addLayout(form)
         layout.addWidget(self._startup_checkbox)
+        layout.addWidget(shortcuts_label)
 
     @staticmethod
     def _set_combo_value(combo: QComboBox, code: str) -> None:
