@@ -15,7 +15,7 @@ Tradução instantânea, num popup dinâmico, em qualquer lugar do seu PC. Apert
 - `Ctrl+S` troca origem/destino na hora com o popup já aberto (ou use o botão de troca)
 - Apaga o campo de digitação na hora com o botão `×` embutido ou `Ctrl+D`
 - Também lê a área de transferência automaticamente, se preferir nem digitar
-- Botão de copiar no campo de resultado, com uma confirmação rápida "Copied!"
+- Botão de copiar no campo de resultado (ou `Ctrl+C` com o popup aberto), com uma confirmação rápida "Copied!"
 - Traduções longas rolam em vez de vazar pra fora do popup
 - Fecha com `Esc` ou clicando fora do popup
 - Tela de Configurações: idiomas padrão, captura de atalho (clica no campo, aperta a combinação nova), iniciar com o Windows

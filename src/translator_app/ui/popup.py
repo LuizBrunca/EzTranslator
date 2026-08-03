@@ -218,6 +218,9 @@ class PopupWindow(QWidget):
         self._input.setPlaceholderText("Type to translate...")
         self._input.returnPressed.connect(self._on_translate_requested)
         self._input.textChanged.connect(self._on_input_changed)
+        # QLineEdit handles Ctrl+C itself (as a standard shortcut) before it would
+        # ever reach keyPressEvent below, so it has to be intercepted here instead.
+        self._input.installEventFilter(self)
 
         self._clear_action = QAction(_clear_icon(), "Clear", self._input)
         self._clear_action.triggered.connect(self._input.clear)
@@ -440,8 +443,26 @@ class PopupWindow(QWidget):
             and event.modifiers() == Qt.KeyboardModifier.ControlModifier
         ):
             self._input.clear()
+        elif (
+            event.key() == Qt.Key.Key_C
+            and event.modifiers() == Qt.KeyboardModifier.ControlModifier
+        ):
+            if self._copy_button.isEnabled():
+                self._on_copy_clicked()
         else:
             super().keyPressEvent(event)
+
+    def eventFilter(self, watched, event) -> bool:
+        if (
+            watched is self._input
+            and event.type() == QEvent.Type.KeyPress
+            and event.key() == Qt.Key.Key_C
+            and event.modifiers() == Qt.KeyboardModifier.ControlModifier
+            and self._copy_button.isEnabled()
+        ):
+            self._on_copy_clicked()
+            return True
+        return super().eventFilter(watched, event)
 
     def closeEvent(self, event) -> None:
         self._debounce_timer.stop()

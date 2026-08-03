@@ -15,7 +15,7 @@ Instant translation, in a dynamic popup, anywhere on your PC. Press a global hot
 - `Ctrl+S` swaps source/target instantly while the popup is open (or use the swap button)
 - Clear the input instantly with the inline `×` button or `Ctrl+D`
 - Also reads your clipboard automatically, if you'd rather not type at all
-- Copy button on the result field, with a quick "Copied!" confirmation
+- Copy button on the result field (or `Ctrl+C` while the popup is open), with a quick "Copied!" confirmation
 - Long translations scroll instead of spilling out of the popup
 - Closes on `Esc` or by clicking outside the popup
 - Settings window: default languages, hotkey capture (click the field, press the new combo), start-with-Windows toggle
