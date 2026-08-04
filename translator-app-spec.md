@@ -27,7 +27,7 @@ A Python desktop application that runs continuously in the background, provides 
 | GUI | `PySide6` | Also provides the system tray icon (`QSystemTrayIcon`) and clipboard access (`QGuiApplication.clipboard()`) — no separate tray/clipboard libraries needed. |
 | Global hotkey listener | `pynput` | Runs on a daemon thread; `hotkey_listener.py` emits a Qt `Signal` the GUI thread picks up. |
 | Translation engine | `deep-translator` (`GoogleTranslator`) | Free, no API key. |
-| Packaging | `PyInstaller` (`--onefile`) + `Inno Setup` | `.spec` file versioned in the repo; Inno Setup produces a proper per-user installer alongside the portable `.exe`. |
+| Packaging | `PyInstaller` (`--onefile`) + `Inno Setup` | Built straight from a CLI command (no versioned `.spec` file); Inno Setup produces a proper per-user installer alongside the portable `.exe`. |
 | Config/settings | `.json` file in `%LOCALAPPDATA%\EzTranslator\` | Stores default languages and hotkey; merge-forward defaults for compatibility. |
 | Logging | Rotating file handler | Console + `%LOCALAPPDATA%\EzTranslator\logs\`, no remote/DB persistence. |
 
