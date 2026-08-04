@@ -370,10 +370,7 @@ class PopupWindow(QWidget):
         self._update_swap_enabled()
         self._save_language_prefs()
 
-        if self._copy_button.isEnabled():  # there's a real translation result to carry over
-            self._input.blockSignals(True)
-            self._input.setText(self._output.toPlainText())
-            self._input.blockSignals(False)
+        if self._input.text().strip():
             self._on_translate_requested()
 
     def _on_translate_requested(self) -> None:
