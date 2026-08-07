@@ -84,7 +84,7 @@ src/translator_app/
 ### Building the executable
 
 ```powershell
-uv run pyinstaller run.py --name EzTranslator --onefile --windowed --icon src/translator_app/assets/app.ico --add-data "src/translator_app/assets/app.ico;translator_app/assets" --noconfirm
+uv run pyinstaller run.py --name EzTranslator --onefile --windowed --icon src/translator_app/assets/app.ico --add-data "src/translator_app/assets/app.ico;translator_app/assets" --version-file version_info.txt --noconfirm
 ```
 
 Produces `dist/EzTranslator.exe` (single-file, windowed, no console).
