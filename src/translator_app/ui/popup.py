@@ -12,6 +12,7 @@ from PySide6.QtGui import (
     QRegion,
 )
 from PySide6.QtWidgets import (
+    QApplication,
     QComboBox,
     QGridLayout,
     QHBoxLayout,
@@ -23,6 +24,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from ..click_listener import GlobalClickListener
 from ..config import load_config, save_config
 from ..translator.languages import AUTO_DETECT, AUTO_DETECT_LABEL, LANGUAGES
 from ..translator.worker import TranslationWorker
@@ -183,6 +185,9 @@ class PopupWindow(QWidget):
         self._worker: TranslationWorker | None = None
         self._ignore_deactivate = False
         self._drag_offset = None
+
+        self._click_listener = GlobalClickListener()
+        self._click_listener.pressed.connect(self._on_global_mouse_press)
 
         config = load_config()
 
@@ -470,6 +475,23 @@ class PopupWindow(QWidget):
     def closeEvent(self, event) -> None:
         self._debounce_timer.stop()
         super().closeEvent(event)
+
+    def showEvent(self, event) -> None:
+        self._click_listener.start()
+        super().showEvent(event)
+
+    def hideEvent(self, event) -> None:
+        self._click_listener.stop()
+        super().hideEvent(event)
+
+    def _on_global_mouse_press(self) -> None:
+        # Windows doesn't always let the popup take focus when the hotkey opens
+        # it; when it doesn't, clicking/selecting in the app that kept focus
+        # never deactivates the popup, so changeEvent below can't catch it.
+        # Checking the press itself works either way. widgetAt() also covers
+        # our own child popups (e.g. the combo box dropdown list).
+        if self.isVisible() and QApplication.widgetAt(QCursor.pos()) is None:
+            self.close()
 
     def changeEvent(self, event) -> None:
         if (

@@ -38,6 +38,7 @@ src/translator_app/
 ├── main.py              # Entry point — wires tray, popup, hotkey listener, settings
 ├── tray.py              # System tray icon and menu (Open, Settings, Quit)
 ├── hotkey_listener.py   # Global hotkey registration (pynput) + Qt event capture for rebinding
+├── click_listener.py    # Global mouse-press watcher, closes the popup on outside clicks
 ├── single_instance.py   # Prevents running more than one copy at once
 ├── startup.py           # Windows "start on boot" registry toggle
 ├── config.py            # Paths + config.json load/save

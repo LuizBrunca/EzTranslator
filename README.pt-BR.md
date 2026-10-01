@@ -66,6 +66,7 @@ src/translator_app/
 ├── main.py              # Ponto de entrada — conecta bandeja, popup, hotkey, settings
 ├── tray.py               # Ícone e menu da bandeja do sistema
 ├── hotkey_listener.py     # Registro do atalho global (pynput)
+├── click_listener.py      # Observa cliques globais enquanto o popup está aberto (pynput)
 ├── single_instance.py    # Impede rodar mais de uma cópia ao mesmo tempo
 ├── startup.py             # Toggle de "iniciar com o Windows" no Registro
 ├── config.py              # Caminhos + carregar/salvar config.json
