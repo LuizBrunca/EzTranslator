@@ -26,7 +26,7 @@ A Python desktop application that runs continuously in the background, provides 
 |---|---|---|
 | GUI | `PySide6` | Also provides the system tray icon (`QSystemTrayIcon`) and clipboard access (`QGuiApplication.clipboard()`) — no separate tray/clipboard libraries needed. |
 | Global hotkey listener | `pynput` | Runs on a daemon thread; `hotkey_listener.py` emits a Qt `Signal` the GUI thread picks up. |
-| Translation engine | `deep-translator` (`GoogleTranslator`) | Free, no API key. |
+| Translation engine | Google Translate `translate_a/single` endpoint via `requests` | Free, no API key. Replaced `deep-translator`, whose scraped `/m` page started returning 429 for every request. |
 | Packaging | `PyInstaller` (`--onefile`) + `Inno Setup` | Built straight from a CLI command (no versioned `.spec` file); Inno Setup produces a proper per-user installer alongside the portable `.exe`. |
 | Config/settings | `.json` file in `%LOCALAPPDATA%\EzTranslator\` | Stores default languages and hotkey; merge-forward defaults for compatibility. |
 | Logging | Rotating file handler | Console + `%LOCALAPPDATA%\EzTranslator\logs\`, no remote/DB persistence. |
@@ -46,7 +46,7 @@ src/translator_app/
 │   ├── popup.py         # Translation popup window
 │   └── settings.py      # Settings window
 ├── translator/
-│   ├── engine.py         # GoogleTranslator wrapper
+│   ├── engine.py         # Google Translate HTTP client
 │   ├── worker.py          # Runs translation on a background QThread
 │   └── languages.py       # Curated language list
 └── assets/
@@ -66,7 +66,7 @@ src/translator_app/
 - [x] Reads clipboard on trigger, auto-translates
 - [x] Copy-to-clipboard button on result (also `Ctrl+C`)
 - [x] Settings window: hotkey rebind, default languages
-  - No API key entry — not needed, `deep-translator`'s Google Translate backend is free.
+  - No API key entry — not needed, the Google Translate web endpoint is free.
 
 ## 7. Shipped beyond MVP
 
@@ -95,7 +95,7 @@ src/translator_app/
 ## 10. Open Questions — Resolved
 
 - **Platform**: Windows-only. No cross-platform requirement.
-- **Translation engine**: Google Translate (via `deep-translator`'s `GoogleTranslator`). No DeepL/paid engine for now.
+- **Translation engine**: Google Translate's free `translate_a/single` endpoint, called directly with `requests` (originally `deep-translator`). No DeepL/paid engine for now.
 - **Privacy**: Translations are fully ephemeral — nothing is logged or stored. No history feature, no local/remote persistence of source or translated text.
 
 ## 11. Development Process

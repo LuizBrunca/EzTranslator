@@ -22,7 +22,7 @@ Tradução instantânea, num popup dinâmico, em qualquer lugar do seu PC. Apert
 - Totalmente efêmero — nada sobre suas traduções é logado, salvo ou guardado em histórico
 - Disponível atualmente só para Windows
 
-A tradução usa o Google Translate (via [deep-translator](https://github.com/nidhaloff/deep-translator)), gratuito, sem precisar de chave de API.
+A tradução usa o endpoint web gratuito do Google Translate (chamado direto com `requests`), sem precisar de chave de API.
 
 ## Instalação
 
@@ -74,7 +74,7 @@ src/translator_app/
 │   ├── popup.py            # O popup de tradução
 │   └── settings.py         # Tela de configurações
 ├── translator/
-│   ├── engine.py            # Wrapper do GoogleTranslator
+│   ├── engine.py            # Cliente HTTP do Google Translate
 │   ├── worker.py             # Roda a tradução numa QThread separada
 │   └── languages.py          # Lista curada de idiomas
 └── assets/

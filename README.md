@@ -22,7 +22,7 @@ Instant translation, in a dynamic popup, anywhere on your PC. Press a global hot
 - Fully ephemeral — nothing about your translations is logged, stored, or kept in any history
 - Currently Windows only
 
-Translation is powered by Google Translate (via [deep-translator](https://github.com/nidhaloff/deep-translator)), free, no API key required.
+Translation is powered by Google Translate's free web endpoint (called directly with `requests`), no API key required.
 
 ## Install
 
@@ -74,7 +74,7 @@ src/translator_app/
 │   ├── popup.py            # The translation popup
 │   └── settings.py         # Settings window
 ├── translator/
-│   ├── engine.py            # GoogleTranslator wrapper
+│   ├── engine.py            # Google Translate HTTP client
 │   ├── worker.py             # Runs translation on a background QThread
 │   └── languages.py          # Curated language list
 └── assets/
